@@ -116,8 +116,10 @@ docker run -it --rm \
 ```
 source /ros_entrypoint.sh
 cd rtabmap/build
-~/cmake -DWITH_OPENGV=ON ..
+mkdir ../../rtabmap_install
+~/cmake -DWITH_OPENGV=ON -DCMAKE_INSTALL_PREFIX=../../rtabmap_install ..
 make
-make install
+sudo make install
+export LD_LIBRARY_PATH=../../rtabmap_install/lib
 ldconfig
 ```
