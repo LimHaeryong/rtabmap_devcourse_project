@@ -74,3 +74,50 @@ This project is supported by [IntRoLab - Intelligent / Interactive / Integrated 
     </tbody>
 </table>
  
+---
+
+
+### install nvidia-docker2
+```
+sudo apt install -y nvidia-docker2
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+### create image
+```
+git clone https://github.com/LimHaeryong/rtabmap_devcourse_project.git
+cd rtabmap_devcourse_project
+sudo docker build --build-arg TARGETPLATFORM=linux/amd64 --no-cache --progress=tty --force-rm -f test.dockerfile -t rtabmap_team2:base .
+```
+
+
+
+### create container
+```
+export XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
+docker run -it --rm \
+  --privileged \
+  --env="DISPLAY=$DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  --env="XAUTHORITY=$XAUTH" \
+  --volume="$XAUTH:$XAUTH" \
+  --runtime=nvidia \
+  --network host \
+  -v ~/Documents/RTAB-Map:/root/Documents/RTAB-Map \
+  rtabmap_team2:base
+```
+
+### build rtabmap
+```
+source /ros_entrypoint.sh
+cd rtabmap/build
+~/cmake -DWITH_OPENGV=ON ..
+make
+make install
+ldconfig
+```
