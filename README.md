@@ -120,6 +120,6 @@ mkdir ../../rtabmap_install
 ~/cmake -DWITH_OPENGV=ON -DCMAKE_INSTALL_PREFIX=../../rtabmap_install ..
 make
 sudo make install
-export LD_LIBRARY_PATH=../../rtabmap_install/lib
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:../../rtabmap_install/lib
 ldconfig
 ```
